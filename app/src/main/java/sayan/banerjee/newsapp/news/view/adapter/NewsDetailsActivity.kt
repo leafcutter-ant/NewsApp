@@ -34,7 +34,11 @@ class NewsDetailsActivity : BaseActivity() {
 
     private fun getBundleArticle() {
         val bundle = intent.extras
-        mArticle = bundle?.getParcelable(ARTICLE_KEY)
+        bundle.let {
+            mArticle.let {
+                mArticle = bundle?.getParcelable(ARTICLE_KEY)
+            }
+        }
     }
 
     private fun showWebView() {

@@ -34,7 +34,7 @@ class CommonUtils {
                     .into(imageView)
         }
 
-        fun getNewsAPIKey(): String = NewsAPIKey.getNewsApiKey()
+        fun getNewsAPIKey(): String = NewsAPIKey.NEWS_AUTH_KEY
 
         fun getNewsBaseURL(): String = APIConstants.NEWS_BASE_URL
     }

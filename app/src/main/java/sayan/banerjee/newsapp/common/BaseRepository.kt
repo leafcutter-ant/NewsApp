@@ -50,7 +50,7 @@ open class BaseRepository {
 
         fun getOnlineArticles(articleAdapter: ArticleAdapter, articleDAO: IArticleDAO, listener: IAddArticleListener) {
             val moviesService = ServiceGenerator.createService(INewsService::class.java)
-            moviesService.getTopHeadlines("us", CommonUtils.getNewsAPIKey())
+            moviesService.getTopHeadlines(APIConstants.COUNTRY, CommonUtils.getNewsAPIKey())
                     .subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -58,7 +58,10 @@ open class BaseRepository {
                         it.articles?.let { it1 ->
                             articleAdapter.setDataOnline(it1)
                             for (index in 0 until it1.size) {
-                                if (it1[index].author.isNullOrEmpty() || it1[index].title.isNullOrEmpty()){
+                                if (it1[index].author.isNullOrEmpty() || it1[index].title.isNullOrEmpty()
+                                        || it1[index].urlToImage.isNullOrEmpty() || it1[index].urlToNews.isNullOrEmpty()
+                                        || it1[index].description.isNullOrEmpty() || it1[index].publishedAt.isNullOrEmpty()
+                                        || it1[index].content.isNullOrEmpty()) {
                                     continue
                                 } else {
                                     insertOfflineArticle(articleDAO, it1[index], listener)

@@ -39,7 +39,7 @@ class NewsActivity : BaseActivity(), IAddArticleListener, IGetArticlesListener, 
 
     override fun onResume() {
         super.onResume()
-        makeRequestForTopHeadLinesOnline()
+        progress_circular.visibility = GONE
     }
 
     private fun initViews() {
@@ -63,6 +63,7 @@ class NewsActivity : BaseActivity(), IAddArticleListener, IGetArticlesListener, 
     }
 
     private fun makeRequestForTopHeadLinesOnline() {
+        progress_circular.visibility = VISIBLE
         mArticleAdapterOnline?.let {
             mArticleViewModel!!.getArticlesOnline(it, this)
         }
@@ -87,10 +88,15 @@ class NewsActivity : BaseActivity(), IAddArticleListener, IGetArticlesListener, 
 
     override fun onItemClicked(position: Int, article: Article) {
         Log.i(TAG, "Clicked: $position")
-        sendBundleOfArticles(article)
+        if (!(article.urlToNews.isNullOrEmpty() || article.description.isNullOrEmpty()
+                || article.publishedAt.isNullOrEmpty() || article.content.isNullOrEmpty())) {
+            Log.i(TAG, "Article: $article")
+            sendBundleOfArticles(article)
+        }
     }
 
     override fun onArticleAdded(articleOffline: Article) {
+        progress_circular.visibility = GONE
         Log.i(TAG, "onArticleAdded")
     }
 
@@ -100,6 +106,7 @@ class NewsActivity : BaseActivity(), IAddArticleListener, IGetArticlesListener, 
 
     override fun onArticlesPopulated(articles: MutableList<Article>) {
         Log.i(TAG, "onArticlesPopulated: $articles")
+        progress_circular.visibility = GONE
         if (!articles.isNullOrEmpty()) {
             imageView_no_internet.visibility = GONE
             setAdapterOffline(articles)
